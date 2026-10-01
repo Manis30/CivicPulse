@@ -1,42 +1,40 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Activity, ArrowRight, User, HardHat, Compass, Bot, AlertCircle, Loader2 } from 'lucide-react';
+import { Activity, ArrowRight, User, HardHat, Compass, Bot, AlertCircle, Loader2, KeyRound } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { FormField, Input } from '@/components/ui/Input';
 import { authService } from '@/services/authService';
-import { UserRole } from '@civicpulse/shared';
 import { getPortalForRole } from '@/components/auth/ProtectedRoute';
 
 export function LoginPage() {
-  const [email, setEmail] = useState('manager.chen@civicpulse.org');
-  const [password, setPassword] = useState('Password123!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleRoleSwitch = async (role: UserRole) => {
-    setLoading(true);
+  // Helper to quickly fill the email field — does NOT auto-login.
+  // The user MUST still supply their password and submit the form.
+  const handleSelectRoleEmail = (roleEmail: string) => {
+    setEmail(roleEmail);
     setError(null);
-    try {
-      const user = await authService.switchRole(role);
-      navigate(getPortalForRole(user.role), { replace: true });
-    } catch (err: any) {
-      setError(err.message || 'Role authentication failed');
-    } finally {
-      setLoading(false);
-    }
   };
 
   const handleStandardLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email.trim() || !password) {
+      setError('Please provide both email and password.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
-      const user = await authService.login(email, password);
+      const user = await authService.login(email.trim(), password);
       navigate(getPortalForRole(user.role), { replace: true });
     } catch (err: any) {
-      setError(err.message || 'Invalid credentials');
+      setError(err.message || 'Invalid email or password.');
     } finally {
       setLoading(false);
     }
@@ -60,80 +58,12 @@ export function LoginPage() {
 
         {error && (
           <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0" />
+            <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
             <span>{error}</span>
           </div>
         )}
 
-        {/* 1-Click Role Switcher for Seamless Demonstration */}
-        <Card className="p-5 bg-white border border-slate-200 shadow-civic-card rounded-2xl space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600 font-heading">
-              1-Click Verified Role Login
-            </span>
-            <span className="text-[11px] text-slate-400">Authentic JWT Session</span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2 text-xs font-sans">
-            <button
-              onClick={() => handleRoleSwitch('DEPARTMENT_MANAGER')}
-              disabled={loading}
-              className="p-3 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-200 text-left transition-all flex items-center gap-2.5 group disabled:opacity-50"
-            >
-              <div className="w-7 h-7 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                <Compass className="w-4 h-4" />
-              </div>
-              <div className="overflow-hidden">
-                <p className="font-bold text-slate-900 group-hover:text-blue-700">Manager</p>
-                <p className="text-[10px] text-slate-500 truncate">Command Center</p>
-              </div>
-            </button>
-
-            <button
-              onClick={() => handleRoleSwitch('CITIZEN')}
-              disabled={loading}
-              className="p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-200 text-left transition-all flex items-center gap-2.5 group disabled:opacity-50"
-            >
-              <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
-                <User className="w-4 h-4" />
-              </div>
-              <div className="overflow-hidden">
-                <p className="font-bold text-slate-900 group-hover:text-emerald-700">Citizen</p>
-                <p className="text-[10px] text-slate-500 truncate">Report & Track</p>
-              </div>
-            </button>
-
-            <button
-              onClick={() => handleRoleSwitch('FIELD_OFFICER')}
-              disabled={loading}
-              className="p-3 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-200 text-left transition-all flex items-center gap-2.5 group disabled:opacity-50"
-            >
-              <div className="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-                <HardHat className="w-4 h-4" />
-              </div>
-              <div className="overflow-hidden">
-                <p className="font-bold text-slate-900 group-hover:text-amber-800">Field Officer</p>
-                <p className="text-[10px] text-slate-500 truncate">Tasks & Evidence</p>
-              </div>
-            </button>
-
-            <button
-              onClick={() => handleRoleSwitch('PLATFORM_ADMIN')}
-              disabled={loading}
-              className="p-3 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 text-left transition-all flex items-center gap-2.5 group disabled:opacity-50"
-            >
-              <div className="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
-                <Bot className="w-4 h-4" />
-              </div>
-              <div className="overflow-hidden">
-                <p className="font-bold text-slate-900 group-hover:text-indigo-700">Admin</p>
-                <p className="text-[10px] text-slate-500 truncate">AI Command</p>
-              </div>
-            </button>
-          </div>
-        </Card>
-
-        {/* Standard Credentials Form */}
+        {/* Credentials Form — Required for Authentication */}
         <Card className="p-6 bg-white border border-slate-200 shadow-civic-card rounded-2xl space-y-4">
           <form onSubmit={handleStandardLogin} className="space-y-4">
             <FormField label="Email Address">
@@ -143,6 +73,7 @@ export function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@civicpulse.org"
                 required
+                autoComplete="email"
               />
             </FormField>
 
@@ -153,6 +84,7 @@ export function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
                 required
+                autoComplete="current-password"
               />
             </FormField>
 
@@ -175,7 +107,7 @@ export function LoginPage() {
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Authenticating...</span>
+                  <span>Verifying Credentials...</span>
                 </>
               ) : (
                 <>
@@ -185,6 +117,99 @@ export function LoginPage() {
               )}
             </Button>
           </form>
+        </Card>
+
+        {/* Demo Accounts Reference — Fills email only, user must provide password */}
+        <Card className="p-4 bg-slate-50 border border-slate-200 shadow-xs rounded-2xl space-y-2.5">
+          <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/80">
+            <div className="flex items-center gap-1.5 text-slate-700">
+              <KeyRound className="w-3.5 h-3.5 text-blue-600" />
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700 font-heading">
+                Demo Accounts Reference
+              </span>
+            </div>
+            <span className="text-[10.5px] font-mono text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">
+              Pass: Password123!
+            </span>
+          </div>
+
+          <p className="text-[11px] text-slate-500 font-sans leading-relaxed">
+            Click any account to fill its email address. Enter the password above to authenticate:
+          </p>
+
+          <div className="grid grid-cols-2 gap-1.5 text-xs font-sans">
+            <button
+              type="button"
+              onClick={() => handleSelectRoleEmail('manager.chen@civicpulse.org')}
+              className={`p-2 rounded-xl text-left transition-all flex items-center gap-2 border ${
+                email === 'manager.chen@civicpulse.org'
+                  ? 'bg-blue-50 border-blue-300 text-blue-700'
+                  : 'bg-white border-slate-200 hover:border-slate-300 text-slate-700'
+              }`}
+            >
+              <div className="w-6 h-6 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                <Compass className="w-3.5 h-3.5" />
+              </div>
+              <div className="overflow-hidden">
+                <p className="font-bold text-xs truncate">Manager</p>
+                <p className="text-[10px] text-slate-400 truncate">manager.chen</p>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleSelectRoleEmail('citizen.elena@civicpulse.org')}
+              className={`p-2 rounded-xl text-left transition-all flex items-center gap-2 border ${
+                email === 'citizen.elena@civicpulse.org'
+                  ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
+                  : 'bg-white border-slate-200 hover:border-slate-300 text-slate-700'
+              }`}
+            >
+              <div className="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                <User className="w-3.5 h-3.5" />
+              </div>
+              <div className="overflow-hidden">
+                <p className="font-bold text-xs truncate">Citizen</p>
+                <p className="text-[10px] text-slate-400 truncate">citizen.elena</p>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleSelectRoleEmail('officer.vance@civicpulse.org')}
+              className={`p-2 rounded-xl text-left transition-all flex items-center gap-2 border ${
+                email === 'officer.vance@civicpulse.org'
+                  ? 'bg-amber-50 border-amber-300 text-amber-800'
+                  : 'bg-white border-slate-200 hover:border-slate-300 text-slate-700'
+              }`}
+            >
+              <div className="w-6 h-6 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                <HardHat className="w-3.5 h-3.5" />
+              </div>
+              <div className="overflow-hidden">
+                <p className="font-bold text-xs truncate">Field Officer</p>
+                <p className="text-[10px] text-slate-400 truncate">officer.vance</p>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleSelectRoleEmail('admin.miller@civicpulse.org')}
+              className={`p-2 rounded-xl text-left transition-all flex items-center gap-2 border ${
+                email === 'admin.miller@civicpulse.org'
+                  ? 'bg-indigo-50 border-indigo-300 text-indigo-700'
+                  : 'bg-white border-slate-200 hover:border-slate-300 text-slate-700'
+              }`}
+            >
+              <div className="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+                <Bot className="w-3.5 h-3.5" />
+              </div>
+              <div className="overflow-hidden">
+                <p className="font-bold text-xs truncate">Admin</p>
+                <p className="text-[10px] text-slate-400 truncate">admin.miller</p>
+              </div>
+            </button>
+          </div>
         </Card>
       </div>
     </div>

@@ -17,12 +17,6 @@ export interface RegisterInput {
   teamId?: string;
 }
 
-const ROLE_CREDENTIALS: Record<UserRole, { email: string; pass: string }> = {
-  DEPARTMENT_MANAGER: { email: 'manager.chen@civicpulse.org', pass: 'Password123!' },
-  CITIZEN: { email: 'citizen.elena@civicpulse.org', pass: 'Password123!' },
-  FIELD_OFFICER: { email: 'officer.vance@civicpulse.org', pass: 'Password123!' },
-  PLATFORM_ADMIN: { email: 'admin.miller@civicpulse.org', pass: 'Password123!' },
-};
 
 export const authService = {
   async login(email: string, password: string): Promise<User> {
@@ -82,11 +76,6 @@ export const authService = {
     return null;
   },
 
-  async switchRole(role: UserRole): Promise<User> {
-    const creds = ROLE_CREDENTIALS[role];
-    // Always attempt real authentication — no fake fallback users
-    return await this.login(creds.email, creds.pass);
-  },
 
   async forgotPassword(email: string): Promise<string> {
     const res = await apiClient.post<{ success: boolean; message: string; data?: { resetToken?: string } }>(
