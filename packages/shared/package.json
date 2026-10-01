@@ -1,0 +1,16 @@
+{
+  "name": "@civicpulse/shared",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types, constants, and policies for CivicPulse",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": ["civicpulse", "shared", "types"],
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

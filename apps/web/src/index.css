@@ -1,0 +1,399 @@
+@import 'mapbox-gl/dist/mapbox-gl.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Platform Admin Layout Width Variable */
+  --admin-sidebar-width: 250px;
+
+  /* Living City — Soft Urban 3D Palette (Fixed Master Prompt) */
+  --bg-ivory: #F7F8F4;
+  --bg-mist: #EEF4F7;
+  --text-navy: #102A43;
+  --text-slate: #526777;
+  --brand-botanical: #159A68;
+  --brand-civic-blue: #2878E5;
+  --state-amber: #F2B84B;
+  --state-coral: #EF6A63;
+  --state-success: #36B37E;
+  --surface-white: #FFFFFF;
+  --border-light: rgba(16, 42, 67, 0.08);
+
+  /* Clean Urban-Tech Base Theme */
+  --bg-workspace: #F7F8F4;
+  --bg-card: #FFFFFF;
+  --border-card: #E2E8F0;
+  --text-primary: #102A43;
+  --text-secondary: #526777;
+  --text-muted: #829AB1;
+
+  /* Brand Colors */
+  --civic-blue: #2878E5;
+  --civic-blue-dark: #1652A5;
+  --civic-blue-light: #EBF3FD;
+
+  --civic-green: #159A68;
+  --civic-green-dark: #0D6846;
+  --civic-green-light: #E7F7F0;
+
+  --civic-amber: #F2B84B;
+  --civic-red: #EF6A63;
+
+  /* CivicPulse Editorial Reference System */
+  --cp-bg: #F7F8F4;
+  --cp-surface: #FFFFFF;
+  --cp-text: #102A43;
+  --cp-muted: #526777;
+  --cp-border: #E2E8EE;
+  --cp-soft: #EEF4F7;
+  --cp-primary: #159A68;
+  --cp-success: #36B37E;
+  --cp-blue: #2878E5;
+
+  /* Global Citizen Typography & Card Density Tokens */
+  --citizen-page-title-size: 24px;
+  --citizen-page-title-line-height: 1.2;
+  --citizen-page-title-weight: 700;
+
+  --citizen-page-subtitle-size: 14px;
+  --citizen-page-subtitle-line-height: 1.45;
+
+  --citizen-section-title-size: 17px;
+  --citizen-section-title-weight: 650;
+
+  --citizen-card-title-size: 15px;
+  --citizen-card-title-weight: 650;
+
+  --citizen-body-size: 14px;
+  --citizen-meta-size: 12px;
+
+  --citizen-card-padding: 18px;
+  --citizen-card-radius: 16px;
+  --citizen-card-border: 1px;
+
+  --card-padding-compact: 14px 16px;
+  --card-radius: 14px;
+  --card-title: 15px;
+  --card-body: 13px;
+  --card-meta: 12px;
+}
+
+/* Crisp Clean Scrollbars for Modern Operations */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Modern Clean Panel & Glass Utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.glass-panel-elevated {
+  background: #FFFFFF;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+/* Clean Accent Borders (No Cyber Gimmicks) */
+.glow-border-cyan {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+}
+
+.glow-border-purple {
+  border-color: #6366F1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+.glow-border-danger {
+  border-color: #EF4444;
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.2);
+}
+
+/* Subtle Map / Pulse Animations */
+@keyframes soft-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.8; }
+}
+
+.animate-soft-pulse {
+  animation: soft-pulse 2s ease-in-out infinite;
+}
+
+/* Civic Digital Twin Marker Halos & Physical 3D Pin Structure */
+@keyframes civic-marker-pulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  60% {
+    transform: scale(2.0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.0);
+    opacity: 0;
+  }
+}
+
+@keyframes civic-halo-focused {
+  0% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  60% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+@keyframes civic-pin-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.civic-marker-ring {
+  animation: civic-marker-pulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.civic-marker-focused .civic-marker-ring {
+  animation: civic-halo-focused 1.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  opacity: 0.6;
+}
+
+/* Prominent focus ring for high-priority incidents */
+.civic-focus-ring {
+  position: absolute;
+  top: 3px;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  border: 1.5px dashed rgba(239, 68, 68, 0.6);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.civic-marker-focused .civic-focus-ring {
+  opacity: 1;
+  animation: spin-slow 8s linear infinite;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.civic-marker-focused .marker-core-pin {
+  transform: scale(1.25) translateY(-5px);
+  box-shadow: 0 12px 28px rgba(16, 42, 67, 0.38), 0 0 20px currentColor;
+}
+
+/* Subtle contact shadow on the ground beneath the physical pin */
+.civic-ground-shadow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 5px;
+  background: radial-gradient(ellipse at center, rgba(16, 42, 67, 0.42) 0%, rgba(16, 42, 67, 0) 75%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Realistic Landmark badge styling */
+.civic-landmark-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(16, 42, 67, 0.12);
+  padding: 3px 9px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 14px rgba(16, 42, 67, 0.1), 0 1px 3px rgba(16, 42, 67, 0.06);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #102A43;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  font-family: 'Sora', sans-serif;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.civic-landmark-badge:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 18px rgba(16, 42, 67, 0.16);
+}
+
+/* Standardized Typography Helpers */
+.font-heading {
+  font-family: 'Sora', 'Space Grotesk', sans-serif;
+}
+
+.font-body {
+  font-family: 'DM Sans', 'Manrope', sans-serif;
+}
+
+/* CivicPulse Gradient */
+.bg-gradient-civic {
+  background: linear-gradient(135deg, #5B5BF5 0%, #3E8BFF 50%, #22C3B0 100%);
+}
+
+.text-gradient-civic {
+  background: linear-gradient(135deg, #5B5BF5 0%, #3E8BFF 50%, #22C3B0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =========================================================================
+   Interactive Live Incident Journey Signal Animations
+   ========================================================================= */
+@keyframes signal-travel {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.35); opacity: 1; filter: drop-shadow(0 0 8px rgba(21, 154, 104, 0.65)); }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+.journey-signal-pulse {
+  animation: signal-travel 1.8s ease-in-out infinite;
+}
+
+@keyframes journey-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.journey-shimmer-bar {
+  animation: journey-shimmer 2.2s linear infinite;
+}
+
+/* Glass floating cards */
+.glass-floating {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(225, 228, 245, 0.9);
+  box-shadow: 0 12px 36px -6px rgba(14, 19, 48, 0.08), 0 4px 12px -2px rgba(14, 19, 48, 0.04);
+}
+
+.glass-floating-dark {
+  background: rgba(10, 18, 54, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(91, 91, 245, 0.25);
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5);
+}
+
+/* Cesium Clean Dark Theme Overrides */
+.cesium-viewer {
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  background: #080C20 !important;
+}
+
+.cesium-widget,
+.cesium-widget canvas {
+  width: 100% !important;
+  height: 100% !important;
+  outline: none !important;
+}
+
+.cesium-viewer-bottom,
+.cesium-widget-credits {
+  display: none !important;
+}
+
+.cesium-infoBox {
+  display: none !important;
+}
+
+/* Admin Sidebar & Scrollbar Utilities */
+.admin-sidebar,
+.admin-sidebar-nav,
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+.admin-sidebar::-webkit-scrollbar,
+.admin-sidebar-nav::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Agent Control Center Orchestrator Keyframes */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes reverse-spin {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 28s linear infinite;
+}
+
+.animate-reverse-spin {
+  animation: reverse-spin 20s linear infinite;
+}
+
+@keyframes spin-subtle {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-subtle {
+  animation: spin-subtle 36s linear infinite;
+}
+
+

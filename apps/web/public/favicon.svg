@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="16" fill="#102A43"/>
+  <rect x="2" y="2" width="60" height="60" rx="14" stroke="#159A68" stroke-opacity="0.3" stroke-width="2"/>
+  <!-- CivicPulse Brand Mark Centered -->
+  <g transform="translate(8, 8)">
+    <path
+      d="M 35 12 C 27.5 6 17 6.5 11 13 C 4.5 20 4.5 28 11 35 C 17 41.5 27.5 42 35 36"
+      stroke="#36B37E"
+      stroke-width="4.5"
+      stroke-linecap="round"
+    />
+    <rect x="16" y="22" width="4.5" height="11" rx="1.5" fill="#FFFFFF" fill-opacity="0.8" />
+    <rect x="22.5" y="14" width="5" height="19" rx="1.5" fill="#36B37E" />
+    <rect x="29.5" y="19" width="4.5" height="14" rx="1.5" fill="#FFFFFF" fill-opacity="0.8" />
+    <circle cx="37" cy="24" r="3" fill="#36B37E" />
+  </g>
+</svg>
