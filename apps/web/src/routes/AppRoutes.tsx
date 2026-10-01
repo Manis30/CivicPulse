@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { PublicLayout } from '@/layouts/PublicLayout';
+import { AuthLayout } from '@/layouts/AuthLayout';
 import { CitizenLayout } from '@/layouts/CitizenLayout';
 import { OfficerLayout } from '@/layouts/OfficerLayout';
 import { ManagerLayout } from '@/layouts/ManagerLayout';
@@ -57,14 +58,18 @@ export function AppRoutes() {
   return (
     <Routes>
       {/* ───────────────────────────────────────────────────────
-          1. Public Pages — accessible to everyone
+          1. Public Landing Pages
           ─────────────────────────────────────────────────────── */}
       <Route element={<PublicLayout />}>
         {/* Root route: if authenticated, redirect to portal; if not, show landing */}
         <Route path="/" element={<RootRoute><LandingPage /></RootRoute>} />
         <Route path="/landing" element={<LandingPage />} />
+      </Route>
 
-        {/* Auth pages — if already logged in, redirect to user's portal */}
+      {/* ───────────────────────────────────────────────────────
+          2. Focused Authentication Pages (64px Header + 52px Footer)
+          ─────────────────────────────────────────────────────── */}
+      <Route element={<AuthLayout />}>
         <Route path="/auth/login" element={
           <GuestRoute><LoginPage /></GuestRoute>
         } />
